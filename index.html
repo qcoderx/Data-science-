@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DATA SCIENCE TIME TABLE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      color: #00f7ff;
+      margin-bottom: 40px;
+      text-shadow: 0 0 10px #00f7ff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 50px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 247, 255, 0.15);
+      background: #111827;
+    }
+
+    thead {
+      background-color: #1f2937;
+    }
+
+    th, td {
+      padding: 18px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    th {
+      color: #00f7ff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    td {
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    td:hover {
+      background-color: #1a2a3a;
+      cursor: pointer;
+    }
+
+    .time-slot {
+      background-color: #1f2937;
+      color: #0ff;
+      font-weight: 700;
+    }
+
+    /* Unique course colors */
+    .BIO102 { color: #00c9a7; }
+    .CHM-CM102 { color: #ff6b6b; }
+    .COS102 { color: #ffd93d; }
+    .LAG-COS106 { color: #1dd3b0; }
+    .MTH102 { color: #7f5af0; }
+    .PHY-CM102 { color: #00b4d8; }
+    .STA112 { color: #f15bb5; }
+    .LAG-COS104 { color: #ff9f1c; }
+
+    .course-key {
+      max-width: 850px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,247,255,0.1);
+    }
+
+    .course-key h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      color: #00f7ff;
+      text-align: center;
+      text-shadow: 0 0 8px #00f7ff;
+    }
+
+    .course-key ul {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 12px;
+      font-size: 1rem;
+    }
+
+    .course-key li {
+      background-color: rgba(255, 255, 255, 0.07);
+      padding: 10px 15px;
+      border-radius: 8px;
+      color: #fff;
+    }
+
+    .course-key li strong {
+      display: inline-block;
+      width: 110px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>DATA SCIENCE TIME TABLE</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="time-slot">08:00–09:00</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><span class="CHM-CM102">CHM-CM102</span></td>
+      </tr>
+      <tr>
+        <td class="time-slot">09:00–10:00</td>
+        <td><span class="CHM-CM102">CHM-CM102</span></td>
+        <td><span class="BIO102">BIO102</span></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">10:00–11:00</td>
+        <td><span class="COS102">COS102</span></td>
+        <td><span class="BIO102">BIO102</span>, <span class="CHM-CM102">CHM-CM102</span></td>
+        <td></td>
+        <td></td>
+        <td><span class="PHY-CM102">PHY-CM102</span></td>
+      </tr>
+      <tr>
+        <td class="time-slot">11:00–12:00</td>
+        <td><span class="COS102">COS102</span></td>
+        <td></td>
+        <td><span class="MTH102">MTH102</span></td>
+        <td><span class="LAG-COS106">LAG-COS106</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">12:00–13:00</td>
+        <td></td>
+        <td><span class="MTH102">MTH102</span></td>
+        <td><span class="MTH102">MTH102</span></td>
+        <td><span class="LAG-COS106">LAG-COS106</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">13:00–14:00</td>
+        <td></td>
+        <td><span class="MTH102">MTH102</span></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">14:00–15:00</td>
+        <td><span class="PHY-CM102">PHY-CM102</span></td>
+        <td><span class="PHY-CM102">PHY-CM102</span></td>
+        <td></td>
+        <td><span class="PHY-CM102">PHY-CM102</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">15:00–16:00</td>
+        <td></td>
+        <td></td>
+        <td><span class="LAG-COS104">LAG-COS104</span></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">16:00–17:00</td>
+        <td><span class="CHM-CM102">CHM-CM102</span>, <span class="STA112">STA112</span></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">17:00–18:00</td>
+        <td><span class="CHM-CM102">CHM-CM102</span>, <span class="STA112">STA112</span></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="course-key">
+    <h2>Course Code Key</h2>
+    <ul>
+      <li><strong class="BIO102">BIO102</strong> – General Biology II</li>
+      <li><strong class="CHM-CM102">CHM-CM102</strong> – General Chemistry II</li>
+      <li><strong class="COS102">COS102</strong> – Computer as a Problem-Solving Tool</li>
+      <li><strong class="LAG-COS106">LAG-COS106</strong> – Introduction to Algorithms & Data Structures</li>
+      <li><strong class="MTH102">MTH102</strong> – Elementary Mathematics II: Calculus</li>
+      <li><strong class="PHY-CM102">PHY-CM102</strong> – General Physics II</li>
+      <li><strong class="STA112">STA112</strong> – Probability I</li>
+      <li><strong class="LAG-COS104">LAG-COS104</strong> – Introduction to Web Design & Development</li>
+    </ul>
+  </div>
+
+</body>
+</html>
