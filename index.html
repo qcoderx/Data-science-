@@ -114,6 +114,98 @@
       display: inline-block;
       width: 110px;
     }
+
+    /* New modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-content {
+      background-color: #111827;
+      margin: 10% auto;
+      padding: 30px;
+      border-radius: 16px;
+      width: 50%;
+      max-width: 500px;
+      box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
+      border: 1px solid #00f7ff;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 247, 255, 0.3);
+      padding-bottom: 10px;
+    }
+
+    .modal-header h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: #00f7ff;
+      margin: 0;
+      text-shadow: 0 0 8px #00f7ff;
+    }
+
+    .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #fff;
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .reminder-btn {
+      background-color: #00f7ff;
+      color: #111827;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+    }
+
+    .reminder-btn:hover {
+      background-color: #00d9e0;
+      box-shadow: 0 0 15px rgba(0, 247, 255, 0.7);
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #00f7ff;
+      color: #111827;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+      display: none;
+      z-index: 1000;
+      font-family: 'Orbitron', sans-serif;
+    }
   </style>
 </head>
 <body>
@@ -229,5 +321,251 @@
     </ul>
   </div>
 
+  <!-- The Modal -->
+  <div id="reminderModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalCourseCode"></h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p id="modalCourseName"></p>
+        <p><strong>Day:</strong> <span id="modalDay"></span></p>
+        <p><strong>Time:</strong> <span id="modalTime"></span></p>
+        <p><strong>Venue:</strong> <span id="modalVenue"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button class="reminder-btn" id="setReminder">Set Reminder</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification">
+    Reminder set successfully!
+  </div>
+
+  <script>
+    // Course data with venues from Excel (same as before)
+    const courseData = {
+      "BIO102": {
+        name: "General Biology II",
+        venues: {
+          "Tuesday 09:00-10:00": "DLI B/C",
+          "Tuesday 10:00-11:00": "DLI B/C"
+        }
+      },
+      "CHM-CM102": {
+        name: "General Chemistry II",
+        venues: {
+          "Monday 09:00-10:00": "DLI A/B/C",
+          "Wednesday 10:00-11:00": "DLI A/B/C",
+          "Friday 08:00-09:00": "DLI A/B/C"
+        }
+      },
+      "COS102": {
+        name: "Computer as a Problem-Solving Tool",
+        venues: {
+          "Monday 10:00-11:00": "LT 009",
+          "Monday 11:00-12:00": "LT 009"
+        }
+      },
+      "LAG-COS106": {
+        name: "Introduction to Algorithms & Data Structures",
+        venues: {
+          "Thursday 11:00-12:00": "S006",
+          "Thursday 12:00-13:00": "S006"
+        }
+      },
+      "MTH102": {
+        name: "Elementary Mathematics II: Calculus",
+        venues: {
+          "Tuesday 12:00-13:00": "DLI A/B/C",
+          "Wednesday 11:00-12:00": "DLI A/B/C",
+          "Wednesday 12:00-13:00": "DLI A/B/C"
+        }
+      },
+      "PHY-CM102": {
+        name: "General Physics II",
+        venues: {
+          "Monday 14:00-15:00": "DLI A/B/C",
+          "Thursday 14:00-15:00": "DLI A/B/C",
+          "Thursday 15:00-16:00": "DLI A/B/C",
+          "Friday 10:00-11:00": "DLI A/B/C"
+        }
+      },
+      "STA112": {
+        name: "Probability I",
+        venues: {
+          "Monday 16:00-17:00": "DLI A/B/C",
+          "Monday 17:00-18:00": "DLI A/B/C"
+        }
+      },
+      "LAG-COS104": {
+        name: "Introduction to Web Design & Development",
+        venues: {
+          "Wednesday 14:00-15:00": "E303",
+          "Wednesday 15:00-16:00": "E303"
+        }
+      }
+    };
+
+    // Get the modal
+    const modal = document.getElementById("reminderModal");
+    const span = document.getElementsByClassName("close")[0];
+    const notification = document.getElementById("notification");
+
+    // When user clicks on a course
+    document.querySelectorAll('td span').forEach(course => {
+      course.addEventListener('click', function() {
+        const courseCode = this.className;
+        const day = this.parentElement.parentElement.children[0].textContent;
+        const timeSlot = this.parentElement.parentElement.children[0].className;
+        const time = this.parentElement.parentElement.children[0].textContent;
+        const dayOfWeek = this.closest('tbody').children[0].children[this.parentElement.cellIndex].textContent;
+        
+        // Find the venue
+        const fullDayTime = `${dayOfWeek} ${time}`;
+        const venue = courseData[courseCode].venues[fullDayTime] || "Not specified";
+
+        // Set modal content
+        document.getElementById("modalCourseCode").textContent = courseCode;
+        document.getElementById("modalCourseName").textContent = courseData[courseCode].name;
+        document.getElementById("modalDay").textContent = dayOfWeek;
+        document.getElementById("modalTime").textContent = time;
+        document.getElementById("modalVenue").textContent = venue;
+
+        // Store current course info for reminder
+        document.getElementById("setReminder").dataset.course = JSON.stringify({
+          code: courseCode,
+          name: courseData[courseCode].name,
+          day: dayOfWeek,
+          time: time,
+          venue: venue,
+          fullDayTime: fullDayTime
+        });
+
+        modal.style.display = "block";
+      });
+    });
+
+    // Close modal handlers (same as before)
+    span.onclick = function() { modal.style.display = "none"; }
+    window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
+
+    // Enhanced reminder system with weekly notifications
+    document.getElementById("setReminder").addEventListener('click', async function() {
+      const courseInfo = JSON.parse(this.dataset.course);
+      
+      try {
+        // Check and request notification permission
+        if (Notification.permission !== "granted") {
+          const permission = await Notification.requestPermission();
+          if (permission !== "granted") {
+            showNotification("Please enable notifications to get weekly reminders", false);
+            return;
+          }
+        }
+
+        // Save the reminder
+        saveReminder(courseInfo);
+        
+        // Schedule the notifications
+        scheduleWeeklyReminder(courseInfo);
+        
+        // Show confirmation
+        showNotification(`Weekly reminder set for ${courseInfo.code}`, true);
+        
+        // Close modal
+        modal.style.display = "none";
+      } catch (error) {
+        console.error("Error setting reminder:", error);
+        showNotification("Failed to set reminder", false);
+      }
+    });
+
+    function saveReminder(courseInfo) {
+      const reminders = JSON.parse(localStorage.getItem('courseReminders') || '[]');
+      
+      // Check if reminder already exists
+      const exists = reminders.some(reminder => 
+        reminder.code === courseInfo.code && 
+        reminder.fullDayTime === courseInfo.fullDayTime
+      );
+      
+      if (!exists) {
+        reminders.push(courseInfo);
+        localStorage.setItem('courseReminders', JSON.stringify(reminders));
+      }
+    }
+
+    function scheduleWeeklyReminder(courseInfo) {
+      // Convert day of week to number (0=Sunday, 1=Monday, etc.)
+      const dayMap = {
+        "Monday": 1, "Tuesday": 2, "Wednesday": 3, 
+        "Thursday": 4, "Friday": 5, "Saturday": 6, "Sunday": 0
+      };
+      
+      const dayNumber = dayMap[courseInfo.day];
+      if (dayNumber === undefined) return;
+
+      // Parse time (format: "08:00–09:00")
+      const [startTime] = courseInfo.time.split('–');
+      const [hours, minutes] = startTime.split(':').map(Number);
+
+      // Calculate time until next occurrence
+      const now = new Date();
+      const nextDate = new Date();
+      
+      // Set to next occurrence of this day
+      nextDate.setHours(hours, minutes, 0, 0);
+      const daysUntilNext = (dayNumber - now.getDay() + 7) % 7;
+      nextDate.setDate(now.getDate() + daysUntilNext);
+      
+      // If it's today but time already passed, schedule for next week
+      if (daysUntilNext === 0 && now > nextDate) {
+        nextDate.setDate(nextDate.getDate() + 7);
+      }
+
+      // Time until first notification (in ms)
+      const timeUntilFirst = nextDate - now;
+
+      // Schedule the first notification
+      setTimeout(() => {
+        showNotification(`Reminder: ${courseInfo.code} at ${courseInfo.time} in ${courseInfo.venue}`, true);
+        
+        // Then set weekly interval
+        setInterval(() => {
+          showNotification(`Reminder: ${courseInfo.code} at ${courseInfo.time} in ${courseInfo.venue}`, true);
+        }, 7 * 24 * 60 * 60 * 1000); // 1 week interval
+      }, timeUntilFirst);
+    }
+
+    function showNotification(message, isSuccess) {
+      // Browser notification
+      if (Notification.permission === "granted") {
+        new Notification("Class Reminder", {
+          body: message,
+          icon: isSuccess ? "https://cdn-icons-png.flaticon.com/512/190/190411.png" : "https://cdn-icons-png.flaticon.com/512/1828/1828843.png"
+        });
+      }
+      
+      // In-app notification
+      notification.textContent = message;
+      notification.style.backgroundColor = isSuccess ? "#00f7ff" : "#ff6b6b";
+      notification.style.display = "block";
+      setTimeout(() => {
+        notification.style.display = "none";
+      }, 3000);
+    }
+
+    // Load existing reminders when page loads
+    window.addEventListener('load', () => {
+      const reminders = JSON.parse(localStorage.getItem('courseReminders') || []);
+      reminders.forEach(reminder => {
+        scheduleWeeklyReminder(reminder);
+      });
+    });
+  </script>
 </body>
 </html>
