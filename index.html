@@ -321,7 +321,6 @@
     </ul>
   </div>
 
-  <!-- The Modal -->
   <div id="reminderModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -340,13 +339,12 @@
     </div>
   </div>
 
-  <!-- Notification -->
   <div id="notification" class="notification">
     Reminder set successfully!
   </div>
 
   <script>
-    // Course data with venues from Excel (same as before)
+    // Course data with venues
     const courseData = {
       "BIO102": {
         name: "General Biology II",
@@ -418,81 +416,101 @@
     // When user clicks on a course
     document.querySelectorAll('td span').forEach(course => {
       course.addEventListener('click', function() {
-        const courseCode = this.className;
-        const day = this.parentElement.parentElement.children[0].textContent;
-        const timeSlot = this.parentElement.parentElement.children[0].className;
-        const time = this.parentElement.parentElement.children[0].textContent;
-        const dayOfWeek = this.closest('tbody').children[0].children[this.parentElement.cellIndex].textContent;
-        
-        // Find the venue
-        const fullDayTime = `${dayOfWeek} ${time}`;
-        const venue = courseData[courseCode].venues[fullDayTime] || "Not specified";
+        const courseCode = this.className; // e.g., "BIO102"
+        const courseCell = this.parentElement; // The TD element containing the course span
+        const courseRow = courseCell.parentElement; // The TR element for this time slot
+        const table = this.closest('table');
+
+        // 1. Get the Day of the Week from the table header
+        const dayColumnIndex = courseCell.cellIndex;
+        const headerCells = table.querySelector('thead tr').children;
+        const dayOfWeek = headerCells[dayColumnIndex].textContent.trim(); // e.g., "Monday"
+
+        // 2. Get the Time slot from the first cell of the current row (e.g., "08:00–09:00")
+        const timeWithEnDash = courseRow.children[0].textContent.trim();
+
+        // 3. Format time to match the key in courseData.venues (replace en-dash '–' with hyphen '-')
+        const timeWithHyphen = timeWithEnDash.replace('–', '-'); // e.g., "08:00-09:00"
+
+        // 4. Construct the key for venue lookup
+        const fullDayTimeKey = `${dayOfWeek} ${timeWithHyphen}`; // e.g., "Monday 08:00-09:00"
+
+        // 5. Get course details and venue
+        const courseDetails = courseData[courseCode];
+        let venue = "Not specified"; // Default venue
+        const courseName = courseDetails ? courseDetails.name : "Unknown Course";
+
+        if (courseDetails && courseDetails.venues && courseDetails.venues[fullDayTimeKey]) {
+          venue = courseDetails.venues[fullDayTimeKey];
+        } else {
+          console.warn(`Venue not found for ${courseCode} at "${fullDayTimeKey}". Please check courseData. Available keys for ${courseCode}:`, courseDetails && courseDetails.venues ? Object.keys(courseDetails.venues) : 'Course code or venues not found in courseData.');
+        }
 
         // Set modal content
         document.getElementById("modalCourseCode").textContent = courseCode;
-        document.getElementById("modalCourseName").textContent = courseData[courseCode].name;
+        document.getElementById("modalCourseName").textContent = courseName;
         document.getElementById("modalDay").textContent = dayOfWeek;
-        document.getElementById("modalTime").textContent = time;
+        document.getElementById("modalTime").textContent = timeWithEnDash; // Display original time format from table
         document.getElementById("modalVenue").textContent = venue;
 
         // Store current course info for reminder
         document.getElementById("setReminder").dataset.course = JSON.stringify({
           code: courseCode,
-          name: courseData[courseCode].name,
+          name: courseName,
           day: dayOfWeek,
-          time: time,
+          time: timeWithEnDash, // Store original display time for reminder consistency
           venue: venue,
-          fullDayTime: fullDayTime
+          fullDayTime: fullDayTimeKey // This key is used for internal logic/lookup
         });
 
         modal.style.display = "block";
       });
     });
 
-    // Close modal handlers (same as before)
+    // Close modal handlers
     span.onclick = function() { modal.style.display = "none"; }
     window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
 
     // Enhanced reminder system with weekly notifications
     document.getElementById("setReminder").addEventListener('click', async function() {
       const courseInfo = JSON.parse(this.dataset.course);
-      
+
       try {
         // Check and request notification permission
         if (Notification.permission !== "granted") {
           const permission = await Notification.requestPermission();
           if (permission !== "granted") {
-            showNotification("Please enable notifications to get weekly reminders", false);
+            showNotification("Please enable notifications to get weekly reminders.", false); // Added a period
             return;
           }
         }
 
         // Save the reminder
         saveReminder(courseInfo);
-        
+
         // Schedule the notifications
         scheduleWeeklyReminder(courseInfo);
-        
+
         // Show confirmation
-        showNotification(`Weekly reminder set for ${courseInfo.code}`, true);
-        
+        showNotification(`Weekly reminder set for ${courseInfo.code}.`, true); // Added a period
+
         // Close modal
         modal.style.display = "none";
       } catch (error) {
         console.error("Error setting reminder:", error);
-        showNotification("Failed to set reminder", false);
+        showNotification("Failed to set reminder.", false); // Added a period
       }
     });
 
     function saveReminder(courseInfo) {
       const reminders = JSON.parse(localStorage.getItem('courseReminders') || '[]');
-      
+
       // Check if reminder already exists
-      const exists = reminders.some(reminder => 
-        reminder.code === courseInfo.code && 
-        reminder.fullDayTime === courseInfo.fullDayTime
+      const exists = reminders.some(reminder =>
+        reminder.code === courseInfo.code &&
+        reminder.fullDayTime === courseInfo.fullDayTime // Use fullDayTime for uniqueness
       );
-      
+
       if (!exists) {
         reminders.push(courseInfo);
         localStorage.setItem('courseReminders', JSON.stringify(reminders));
@@ -502,38 +520,56 @@
     function scheduleWeeklyReminder(courseInfo) {
       // Convert day of week to number (0=Sunday, 1=Monday, etc.)
       const dayMap = {
-        "Monday": 1, "Tuesday": 2, "Wednesday": 3, 
+        "Monday": 1, "Tuesday": 2, "Wednesday": 3,
         "Thursday": 4, "Friday": 5, "Saturday": 6, "Sunday": 0
       };
-      
+
       const dayNumber = dayMap[courseInfo.day];
-      if (dayNumber === undefined) return;
+      if (dayNumber === undefined) {
+        console.error("Invalid day for reminder:", courseInfo.day);
+        return;
+      }
 
-      // Parse time (format: "08:00–09:00")
-      const [startTime] = courseInfo.time.split('–');
-      const [hours, minutes] = startTime.split(':').map(Number);
+      // Parse time (format: "08:00–09:00") - uses en-dash from courseInfo.time
+      const [startTimeString] = courseInfo.time.split('–');
+      const [hours, minutes] = startTimeString.split(':').map(Number);
 
+      if (isNaN(hours) || isNaN(minutes)) {
+        console.error("Invalid time for reminder:", courseInfo.time);
+        return;
+      }
+      
       // Calculate time until next occurrence
       const now = new Date();
       const nextDate = new Date();
-      
+
       // Set to next occurrence of this day
-      nextDate.setHours(hours, minutes, 0, 0);
-      const daysUntilNext = (dayNumber - now.getDay() + 7) % 7;
-      nextDate.setDate(now.getDate() + daysUntilNext);
+      nextDate.setHours(hours, minutes, 0, 0); // Set H, M, S, MS
+      
+      let daysUntilNext = (dayNumber - now.getDay() + 7) % 7;
       
       // If it's today but time already passed, schedule for next week
-      if (daysUntilNext === 0 && now > nextDate) {
-        nextDate.setDate(nextDate.getDate() + 7);
+      if (daysUntilNext === 0 && (now.getHours() > hours || (now.getHours() === hours && now.getMinutes() >= minutes))) {
+        daysUntilNext = 7;
       }
+      
+      nextDate.setDate(now.getDate() + daysUntilNext);
 
       // Time until first notification (in ms)
-      const timeUntilFirst = nextDate - now;
+      const timeUntilFirst = nextDate.getTime() - now.getTime();
+
+      if (timeUntilFirst < 0) { // Should not happen with the logic above, but as a safeguard
+          console.error("Calculated timeUntilFirst is negative, scheduling for next week plus offset.");
+          nextDate.setDate(nextDate.getDate() + 7); // Advance by one more week
+          // Recalculate timeUntilFirst if needed, or simply log and proceed if it's a rare edge case.
+          // For simplicity, we'll let it schedule potentially further out if this error path is hit.
+      }
+
 
       // Schedule the first notification
       setTimeout(() => {
         showNotification(`Reminder: ${courseInfo.code} at ${courseInfo.time} in ${courseInfo.venue}`, true);
-        
+
         // Then set weekly interval
         setInterval(() => {
           showNotification(`Reminder: ${courseInfo.code} at ${courseInfo.time} in ${courseInfo.venue}`, true);
@@ -549,7 +585,7 @@
           icon: isSuccess ? "https://cdn-icons-png.flaticon.com/512/190/190411.png" : "https://cdn-icons-png.flaticon.com/512/1828/1828843.png"
         });
       }
-      
+
       // In-app notification
       notification.textContent = message;
       notification.style.backgroundColor = isSuccess ? "#00f7ff" : "#ff6b6b";
@@ -561,10 +597,14 @@
 
     // Load existing reminders when page loads
     window.addEventListener('load', () => {
-      const reminders = JSON.parse(localStorage.getItem('courseReminders') || []);
-      reminders.forEach(reminder => {
-        scheduleWeeklyReminder(reminder);
-      });
+      if (Notification.permission === "granted") { // Only schedule if permission already granted
+        const reminders = JSON.parse(localStorage.getItem('courseReminders') || []);
+        reminders.forEach(reminder => {
+          scheduleWeeklyReminder(reminder);
+        });
+      } else {
+        console.log("Notification permission not granted. Reminders will not be scheduled on load.");
+      }
     });
   </script>
 </body>
