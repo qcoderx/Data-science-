@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casual Data Insights Profile</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to mimic the Orbitron font and add global background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .text-neon-blue {
+            color: #00f7ff;
+        }
+        .shadow-neon {
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.7);
+        }
+        .border-neon {
+            border-color: #00f7ff;
+        }
+        .bg-gradient-dark {
+            background: linear-gradient(145deg, #1f2937, #111827);
+        }
+    </style>
+</head>
+<body class="antialiased p-4 sm:p-6 md:p-8 flex items-center justify-center">
+
+    <main class="max-w-xl mx-auto w-full space-y-4 sm:space-y-6">
+        <!-- space-y changed to be slightly less for more compact feel -->
+
+        <!-- Header / Main Profile Card -->
+        <header class="text-center py-8 px-6 rounded-xl bg-gradient-dark shadow-lg shadow-blue-500/30 border border-gray-700 hover:shadow-neon transition-all duration-300">
+            <div class="flex flex-col items-center">
+                <!-- Profile picture is now significantly larger -->
+                <img src="https://placehold.co/300x300/00f7ff/111827?text=Your+Pic" alt="Profile Picture" class="w-72 h-72 rounded-full mb-6 object-cover border-4 border-neon-blue shadow-md">
+                <h1 class="font-orbitron text-4xl sm:text-5xl text-neon-blue mb-2 leading-tight">
+                    [Your Full Name]
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-300 mb-2">A.K.A. "<span class="font-bold text-neon-blue">[Your Nickname]</span>"</p>
+                <p class="text-gray-400 text-center text-sm">Data Explorer Extraordinaire | Class of [Year]</p>
+            </div>
+        </header>
+
+        <!-- Dynamic Grid for Info Sections on larger screens, stacks on small screens -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <!-- Name Box -->
+            <section class="bg-gradient-dark p-4 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
+                <h2 class="font-orbitron text-xl text-neon-blue mb-2">Name</h2>
+                <p class="text-gray-300 text-lg">[Your Full Name]</p>
+            </section>
+
+            <!-- Nickname Box -->
+            <section class="bg-gradient-dark p-4 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
+                <h2 class="font-orbitron text-xl text-neon-blue mb-2">Nickname</h2>
+                <p class="text-gray-300 text-lg">[Your Nickname]</p>
+            </section>
+
+            <!-- Class Of Box -->
+            <section class="bg-gradient-dark p-4 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
+                <h2 class="font-orbitron text-xl text-neon-blue mb-2">Class Of</h2>
+                <p class="text-gray-300 text-lg">[Year]</p>
+            </section>
+
+            <!-- Loves Box -->
+            <section class="bg-gradient-dark p-4 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
+                <h2 class="font-orbitron text-xl text-neon-blue mb-2">Loves</h2>
+                <p class="text-gray-300 text-lg">Hiking, Photography, Sci-Fi, Coding</p>
+            </section>
+        </div>
+
+        <!-- Bio Box (kept separate as it's typically longer) -->
+        <section class="bg-gradient-dark p-6 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
+            <h2 class="font-orbitron text-2xl text-neon-blue mb-4">Bio</h2>
+            <p class="text-gray-300 leading-relaxed">Passionate about data, turning numbers into cool insights. Always up for a challenge!</p>
+        </section>
+
+    </main>
+
+</body>
+</html>
