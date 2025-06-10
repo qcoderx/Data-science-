@@ -1,102 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casual Data Insights Profile</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* Custom styles to mimic the Orbitron font and add global background */
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-            color: #fff;
-            min-height: 100vh;
-        }
-        .font-orbitron {
-            font-family: 'Orbitron', sans-serif;
-        }
-        .text-neon-blue {
-            color: #00f7ff;
-        }
-        .shadow-neon {
-            box-shadow: 0 0 15px rgba(0, 247, 255, 0.7);
-        }
-        .border-neon {
-            border-color: #00f7ff;
-        }
-        .bg-gradient-dark {
-            background: linear-gradient(145deg, #1f2937, #111827);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>DATA SCIENCE TIME TABLE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      color: #00f7ff;
+      margin-bottom: 40px;
+      text-shadow: 0 0 10px #00f7ff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 50px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 247, 255, 0.15);
+      background: #111827;
+    }
+
+    thead {
+      background-color: #1f2937;
+    }
+
+    th, td {
+      padding: 18px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    th {
+      color: #00f7ff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    td {
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    td:hover {
+      background-color: #1a2a3a;
+      cursor: pointer;
+    }
+
+    .time-slot {
+      background-color: #1f2937;
+      color: #0ff;
+      font-weight: 700;
+    }
+
+    .BIO102 { color: #00c9a7; }
+    .CHM-CM102 { color: #ff6b6b; }
+    .COS102 { color: #ffd93d; }
+    .LAG-COS106 { color: #1dd3b0; }
+    .MTH102 { color: #7f5af0; }
+    .PHY-CM102 { color: #00b4d8; }
+    .STA112 { color: #f15bb5; }
+    .LAG-COS104 { color: #ff9f1c; }
+
+    .course-key {
+      max-width: 850px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,247,255,0.1);
+    }
+
+    .course-key h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      color: #00f7ff;
+      text-align: center;
+      text-shadow: 0 0 8px #00f7ff;
+    }
+
+    .course-key ul {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 12px;
+      font-size: 1rem;
+    }
+
+    .course-key li {
+      background-color: rgba(255, 255, 255, 0.07);
+      padding: 10px 15px;
+      border-radius: 8px;
+      color: #fff;
+    }
+
+    .course-key li strong {
+      display: inline-block;
+      width: 110px;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-content {
+      background-color: #111827;
+      margin: 10% auto;
+      padding: 30px;
+      border-radius: 16px;
+      width: 50%;
+      max-width: 500px;
+      box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
+      border: 1px solid #00f7ff;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 247, 255, 0.3);
+      padding-bottom: 10px;
+    }
+
+    .modal-header h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: #00f7ff;
+      margin: 0;
+      text-shadow: 0 0 8px #00f7ff;
+    }
+
+    .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #fff;
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .reminder-btn {
+      background-color: #00f7ff;
+      color: #111827;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+    }
+
+    .reminder-btn:hover {
+      background-color: #00d9e0;
+      box-shadow: 0 0 15px rgba(0, 247, 255, 0.7);
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #00f7ff;
+      color: #111827;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+      display: none;
+      z-index: 1000;
+      font-family: 'Orbitron', sans-serif;
+    }
+  </style>
 </head>
-<body class="antialiased p-4 sm:p-6 md:p-8 flex items-center justify-center">
+<body>
 
-    <!-- Navigation Bar -->
-    <nav class="absolute top-0 left-0 right-0 py-4 px-6 bg-gradient-dark shadow-lg shadow-blue-500/20 rounded-b-xl flex justify-between items-center z-10">
-        <div class="text-lg font-orbitron text-neon-blue">
-            My Profile
-        </div>
-        <div>
-            <a href="profile.html" class="text-gray-300 hover:text-neon-blue transition-colors duration-300 px-3 py-2 rounded-md font-semibold">
-                Profile
-            </a>
-            <!-- Add more navigation links here if needed -->
-        </div>
-    </nav>
+  <h1>DATA SCIENCE TIME TABLE</h1>
 
-    <main class="max-w-xl mx-auto w-full space-y-4 sm:space-y-6 mt-20">
-        <!-- space-y changed to be slightly less for more compact feel -->
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="time-slot">08:00–09:00</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><span class="CHM-CM102">CHM-CM102</span></td>
+      </tr>
+      <tr>
+        <td class="time-slot">09:00–10:00</td>
+        <td><span class="CHM-CM102">CHM-CM102</span></td>
+        <td><span class="BIO102">BIO102</span></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">10:00–11:00</td>
+        <td><span class="COS102">COS102</span></td>
+        <td><span class="BIO102">BIO102</span></td>
+        <td><span class="CHM-CM102">CHM-CM102</span></td>
+        <td></td>
+        <td><span class="PHY-CM102">PHY-CM102</span></td>
+      </tr>
+      <tr>
+        <td class="time-slot">11:00–12:00</td>
+        <td><span class="COS102">COS102</span></td>
+        <td></td>
+        <td><span class="MTH102">MTH102</span></td>
+        <td><span class="LAG-COS106">LAG-COS106</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">12:00–13:00</td>
+        <td></td>
+        <td><span class="MTH102">MTH102</span></td>
+        <td><span class="MTH102">MTH102</span></td>
+        <td><span class="LAG-COS106">LAG-COS106</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">13:00–14:00</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">14:00–15:00</td>
+        <td><span class="PHY-CM102">PHY-CM102</span></td>
+        <td></td>
+        <td><span class="LAG-COS104">LAG-COS104</span></td>
+        <td><span class="PHY-CM102">PHY-CM102</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">15:00–16:00</td>
+        <td></td>
+        <td></td>
+        <td><span class="LAG-COS104">LAG-COS104</span></td>
+        <td><span class="PHY-CM102">PHY-CM102</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">16:00–17:00</td>
+        <td><span class="STA112">STA112</span></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="time-slot">17:00–18:00</td>
+        <td><span class="STA112">STA112</span></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
 
-        <!-- Header / Main Profile Card -->
-        <header class="text-center py-8 px-6 rounded-xl bg-gradient-dark shadow-lg shadow-blue-500/30 border border-gray-700 hover:shadow-neon transition-all duration-300">
-            <div class="flex flex-col items-center">
-                <!-- Profile picture is now significantly larger -->
-                <img src="https://placehold.co/300x300/00f7ff/111827?text=Your+Pic" alt="Profile Picture" class="w-72 h-72 rounded-full mb-6 object-cover border-4 border-neon-blue shadow-md">
-                <h1 class="font-orbitron text-4xl sm:text-5xl text-neon-blue mb-2 leading-tight">
-                    [Your Full Name]
-                </h1>
-                <p class="text-lg sm:text-xl text-gray-300 mb-2">A.K.A. "<span class="font-bold text-neon-blue">[Your Nickname]</span>"</p>
-                <p class="text-gray-400 text-center text-sm">Data Explorer Extraordinaire | Class of [Year]</p>
-            </div>
-        </header>
+  <div class="course-key">
+    <h2>Course Code Key</h2>
+    <ul>
+      <li><strong class="BIO102">BIO102</strong> – General Biology II</li>
+      <li><strong class="CHM-CM102">CHM-CM102</strong> – General Chemistry II</li>
+      <li><strong class="COS102">COS102</strong> – Computer as a Problem-Solving Tool</li>
+      <li><strong class="LAG-COS106">LAG-COS106</strong> – Introduction to Algorithms & Data Structures</li>
+      <li><strong class="MTH102">MTH102</strong> – Elementary Mathematics II: Calculus</li>
+      <li><strong class="PHY-CM102">PHY-CM102</strong> – General Physics II</li>
+      <li><strong class="STA112">STA112</strong> – Probability I</li>
+      <li><strong class="LAG-COS104">LAG-COS104</strong> – Introduction to Web Design & Development</li>
+    </ul>
+  </div>
 
-        <!-- Dynamic Grid for Info Sections on larger screens, stacks on small screens -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            <!-- Name Box -->
-            <section class="bg-gradient-dark p-4 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
-                <h2 class="font-orbitron text-xl text-neon-blue mb-2">Name</h2>
-                <p class="text-gray-300 text-lg">[Your Full Name]</p>
-            </section>
+  <div id="reminderModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalCourseCode"></h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p id="modalCourseName"></p>
+        <p><strong>Day:</strong> <span id="modalDay"></span></p>
+        <p><strong>Time:</strong> <span id="modalTime"></span></p>
+        <p><strong>Venue:</strong> <span id="modalVenue"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button class="reminder-btn" id="setReminder">Set Reminder</button>
+      </div>
+    </div>
+  </div>
 
-            <!-- Nickname Box -->
-            <section class="bg-gradient-dark p-4 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
-                <h2 class="font-orbitron text-xl text-neon-blue mb-2">Nickname</h2>
-                <p class="text-gray-300 text-lg">[Your Nickname]</p>
-            </section>
+  <div id="notification" class="notification">
+    Reminder set successfully!
+  </div>
 
-            <!-- Class Of Box -->
-            <section class="bg-gradient-dark p-4 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
-                <h2 class="font-orbitron text-xl text-neon-blue mb-2">Class Of</h2>
-                <p class="text-gray-300 text-lg">[Year]</p>
-            </section>
+  <script>
+    // Course data with venues
+    const courseData = {
+      "BIO102": {
+        name: "General Biology II",
+        venues: {
+          "Tuesday 09:00-10:00": "DLI B/C",
+          "Tuesday 10:00-11:00": "DLI B/C"
+        }
+      },
+      "CHM-CM102": {
+        name: "General Chemistry II",
+        venues: {
+          "Monday 09:00-10:00": "DLI A/B/C",
+          "Wednesday 10:00-11:00": "DLI A/B/C",
+          "Friday 08:00-09:00": "DLI A/B/C"
+        }
+      },
+      "COS102": {
+        name: "Computer as a Problem-Solving Tool",
+        venues: {
+          "Monday 10:00-11:00": "LT 009",
+          "Monday 11:00-12:00": "LT 009"
+        }
+      },
+      "LAG-COS106": {
+        name: "Introduction to Algorithms & Data Structures",
+        venues: {
+          "Thursday 11:00-12:00": "S006",
+          "Thursday 12:00-13:00": "S006"
+        }
+      },
+      "MTH102": {
+        name: "Elementary Mathematics II: Calculus",
+        venues: {
+          "Tuesday 12:00-13:00": "DLI A/B/C",
+          "Wednesday 11:00-12:00": "DLI A/B/C",
+          "Wednesday 12:00-13:00": "DLI A/B/C"
+        }
+      },
+      "PHY-CM102": {
+        name: "General Physics II",
+        venues: {
+          "Monday 14:00-15:00": "DLI A/B/C",
+          "Thursday 14:00-15:00": "DLI A/B/C",
+          "Thursday 15:00-16:00": "DLI A/B/C",
+          "Friday 10:00-11:00": "DLI A/B/C"
+        }
+      },
+      "STA112": {
+        name: "Probability I",
+        venues: {
+          "Monday 16:00-17:00": "DLI A/B/C",
+          "Monday 17:00-18:00": "DLI A/B/C"
+        }
+      },
+      "LAG-COS104": {
+        name: "Introduction to Web Design & Development",
+        venues: {
+          "Wednesday 14:00-15:00": "E303",
+          "Wednesday 15:00-16:00": "E303"
+        }
+      }
+    };
 
-            <!-- Loves Box -->
-            <section class="bg-gradient-dark p-4 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
-                <h2 class="font-orbitron text-xl text-neon-blue mb-2">Loves</h2>
-                <p class="text-gray-300 text-lg">Hiking, Photography, Sci-Fi, Coding</p>
-            </section>
-        </div>
+    // Get the modal
+    const modal = document.getElementById("reminderModal");
+    const span = document.getElementsByClassName("close")[0];
+    const notification = document.getElementById("notification");
 
-        <!-- Bio Box (kept separate as it's typically longer) -->
-        <section class="bg-gradient-dark p-6 rounded-xl shadow-lg border border-gray-700 hover:shadow-neon transition-all duration-300 text-center">
-            <h2 class="font-orbitron text-2xl text-neon-blue mb-4">Bio</h2>
-            <p class="text-gray-300 leading-relaxed">Passionate about data, turning numbers into cool insights. Always up for a challenge!</p>
-        </section>
+    // When user clicks on a course
+    document.querySelectorAll('td span').forEach(course => {
+      course.addEventListener('click', function() {
+        const courseCode = this.className;
+        const courseCell = this.parentElement;
+        const courseRow = courseCell.parentElement;
+        const table = this.closest('table');
+        const dayColumnIndex = courseCell.cellIndex;
+        const headerCells = table.querySelector('thead tr').children;
+        const dayOfWeek = headerCells[dayColumnIndex].textContent.trim();
+        const timeWithEnDash = courseRow.children[0].textContent.trim();
+        const timeWithHyphen = timeWithEnDash.replace('–', '-');
+        const fullDayTimeKey = `${dayOfWeek} ${timeWithHyphen}`;
+        const courseDetails = courseData[courseCode];
+        let venue = "Not specified";
+        const courseName = courseDetails ? courseDetails.name : "Unknown Course";
 
-    </main>
+        if (courseDetails && courseDetails.venues && courseDetails.venues[fullDayTimeKey]) {
+          venue = courseDetails.venues[fullDayTimeKey];
+        } else {
+          console.warn(`Venue not found for ${courseCode} at "${fullDayTimeKey}". Please check courseData. Available keys for ${courseCode}:`, courseDetails && courseDetails.venues ? Object.keys(courseDetails.venues) : 'Course code or venues not found in courseData.');
+        }
 
+        document.getElementById("modalCourseCode").textContent = courseCode;
+        document.getElementById("modalCourseName").textContent = courseName;
+        document.getElementById("modalDay").textContent = dayOfWeek;
+        document.getElementById("modalTime").textContent = timeWithEnDash;
+        document.getElementById("modalVenue").textContent = venue;
+
+        document.getElementById("setReminder").dataset.course = JSON.stringify({
+          code: courseCode,
+          name: courseName,
+          day: dayOfWeek,
+          time: timeWithEnDash,
+          venue: venue,
+          fullDayTime: fullDayTimeKey
+        });
+        modal.style.display = "block";
+      });
+    });
+
+    // Close modal handlers
+    span.onclick = function() { modal.style.display = "none"; }
+    window.onclick = function(event) { if (event.target == modal) modal.style.display = "none"; }
+
+    // Enhanced reminder system
+    document.getElementById("setReminder").addEventListener('click', async function() {
+      console.log("Set Reminder button clicked."); // Log 1: Button clicked
+      const courseInfoString = this.dataset.course;
+
+      if (!courseInfoString) {
+        console.error("Error: No course data found on the reminder button's dataset.");
+        showNotification("Error: Course data missing for reminder.", false);
+        return;
+      }
+      console.log("Course data string from dataset:", courseInfoString); // Log 2: Raw data
+
+      let courseInfo;
+      try {
+        courseInfo = JSON.parse(courseInfoString);
+      } catch (e) {
+        console.error("Error parsing course data from dataset:", e, courseInfoString);
+        showNotification("Error: Could not read course data for reminder.", false);
+        return;
+      }
+      console.log("Parsed courseInfo for reminder:", courseInfo); // Log 3: Parsed data
+
+      if (!courseInfo || typeof courseInfo !== 'object') {
+        console.error("Error: Parsed course data is invalid.", courseInfo);
+        showNotification("Error: Invalid course data for reminder.", false);
+        return;
+      }
+
+
+      if (!window.Notification) {
+        console.error("Browser does not support notifications.");
+        showNotification("Sorry, your browser does not support notifications.", false);
+        return;
+      }
+
+      try {
+        console.log("Current Notification.permission state:", Notification.permission); // Log 4: Initial permission state
+        if (Notification.permission !== "granted") {
+          console.log("Requesting notification permission..."); // Log 5: Attempting to request
+          const permission = await Notification.requestPermission();
+          console.log("Notification permission request result:", permission); // Log 6: Result of request
+          if (permission !== "granted") {
+            showNotification("Please enable notifications to get weekly reminders.", false);
+            console.log("Notification permission was not granted. Reminder not set."); // Log 7: Permission denied/dismissed
+            return;
+          }
+        }
+
+        console.log("Notification permission is granted."); // Log 8: Permission confirmed
+        saveReminder(courseInfo);
+        console.log("Reminder saved to localStorage.", courseInfo); // Log 9: Saved to localStorage
+
+        scheduleWeeklyReminder(courseInfo);
+        console.log("Weekly reminder scheduled.", courseInfo); // Log 10: Scheduling attempted
+
+        showNotification(`Weekly reminder set for ${courseInfo.code}.`, true);
+        modal.style.display = "none";
+
+      } catch (error) {
+        console.error("Error in setReminder process:", error); // Catch all for other errors
+        showNotification("Failed to set reminder. Check console for details.", false);
+      }
+    });
+
+    function saveReminder(courseInfo) {
+      const reminders = JSON.parse(localStorage.getItem('courseReminders') || '[]');
+      const exists = reminders.some(reminder =>
+        reminder.code === courseInfo.code &&
+        reminder.fullDayTime === courseInfo.fullDayTime
+      );
+      if (!exists) {
+        reminders.push(courseInfo);
+        localStorage.setItem('courseReminders', JSON.stringify(reminders));
+        console.log("Reminder newly added to localStorage:", courseInfo);
+      } else {
+        console.log("Reminder already exists in localStorage:", courseInfo);
+      }
+    }
+
+    function scheduleWeeklyReminder(courseInfo) {
+      console.log("Attempting to schedule weekly reminder for:", courseInfo);
+      const dayMap = {
+        "Monday": 1, "Tuesday": 2, "Wednesday": 3,
+        "Thursday": 4, "Friday": 5, "Saturday": 6, "Sunday": 0
+      };
+      const dayNumber = dayMap[courseInfo.day];
+      if (dayNumber === undefined) {
+        console.error("Invalid day for reminder:", courseInfo.day, courseInfo);
+        return;
+      }
+
+      const [startTimeString] = courseInfo.time.split('–'); // Expects en-dash
+      const [hours, minutes] = startTimeString.split(':').map(Number);
+
+      if (isNaN(hours) || isNaN(minutes)) {
+        console.error("Invalid time for reminder parsing:", courseInfo.time, courseInfo);
+        return;
+      }
+      console.log(`Parsed time for reminder: DayNumber=${dayNumber}, Hours=${hours}, Minutes=${minutes}`);
+
+      const now = new Date();
+      const nextDate = new Date(); // Create new Date object for manipulation
+
+      nextDate.setHours(hours, minutes, 0, 0); // Set time for today initially
+
+      let daysToAdd = (dayNumber - now.getDay() + 7) % 7;
+
+      // If target day is today, but time has already passed, schedule for next week
+      if (daysToAdd === 0 && (now.getHours() > hours || (now.getHours() === hours && now.getMinutes() >= minutes))) {
+        console.log("Target time today has passed, scheduling for next week.");
+        daysToAdd = 7;
+      }
+      
+      nextDate.setDate(now.getDate() + daysToAdd); // Set the correct date
+      console.log(`Current time: ${now.toString()}`);
+      console.log(`Calculated next reminder date: ${nextDate.toString()}`);
+
+      const timeUntilFirst = nextDate.getTime() - now.getTime();
+      console.log(`Time until first notification (ms): ${timeUntilFirst}`);
+
+      if (timeUntilFirst < 0) {
+        // This case should ideally be prevented by the logic above
+        console.error("Calculated timeUntilFirst is negative. This indicates an issue in date calculation.", { courseInfo, nowDate: now.toString(), nextDateCalc: nextDate.toString() });
+        // Fallback: schedule for 1 minute from now to avoid immediate firing with negative, and still allow testing.
+        // Or, more correctly, add another week if this somehow happens.
+        // nextDate.setDate(nextDate.getDate() + 7);
+        // timeUntilFirst = nextDate.getTime() - now.getTime();
+        // console.warn("Corrected timeUntilFirst after being negative:", timeUntilFirst, nextDate.toString());
+        // For now, just log, as the logic should prevent this.
+      }
+
+      // Schedule the first notification
+      setTimeout(() => {
+        console.log("Firing scheduled notification for:", courseInfo);
+        showNotification(`Reminder: ${courseInfo.code} at ${courseInfo.time} in ${courseInfo.venue}`, true);
+
+        // Then set weekly interval
+        console.log("Setting up weekly interval for:", courseInfo);
+        setInterval(() => {
+          console.log("Firing weekly interval notification for:", courseInfo);
+          showNotification(`Reminder: ${courseInfo.code} at ${courseInfo.time} in ${courseInfo.venue}`, true);
+        }, 7 * 24 * 60 * 60 * 1000); // 1 week interval
+      }, Math.max(0, timeUntilFirst)); // Ensure delay is not negative
+    }
+
+    function showNotification(message, isSuccess) {
+      if (Notification.permission === "granted" && window.Notification) { // Also check window.Notification support
+        try {
+            new Notification("Class Reminder", {
+            body: message,
+            icon: isSuccess ? "https://cdn-icons-png.flaticon.com/512/190/190411.png" : "https://cdn-icons-png.flaticon.com/512/1828/1828843.png"
+          });
+        } catch (e) {
+            console.error("Error creating browser notification:", e);
+        }
+      }
+
+      notification.textContent = message;
+      notification.style.backgroundColor = isSuccess ? "#00f7ff" : "#ff6b6b";
+      notification.style.display = "block";
+      setTimeout(() => {
+        notification.style.display = "none";
+      }, 3000);
+    }
+
+    window.addEventListener('load', () => {
+      console.log("Page loaded. Checking for existing reminders and notification permission.");
+      if (window.Notification && Notification.permission === "granted") {
+        const reminders = JSON.parse(localStorage.getItem('courseReminders') || '[]');
+        console.log(`Found ${reminders.length} reminders in localStorage to reschedule.`);
+        reminders.forEach(reminder => {
+          console.log("Rescheduling reminder from localStorage on load:", reminder);
+          scheduleWeeklyReminder(reminder);
+        });
+      } else {
+        console.log("Notification permission not granted on load, or Notifications not supported. Stored reminders will not be automatically scheduled.");
+      }
+    });
+  </script>
 </body>
 </html>
