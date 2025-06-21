@@ -105,12 +105,20 @@
             });
 
             input.addEventListener('change', function () {
-                const file = input.files[0];
-                if (file) {
-                    img.src = URL.createObjectURL(file);
-                    img.style.display = 'block';
-                }
-            });
+    const file = input.files[0];
+    if (file) {
+        img.src = URL.createObjectURL(file);
+        img.style.display = 'block';
+
+        img.onload = function () {
+            URL.revokeObjectURL(img.src); // Free memory
+            img.style.objectFit = 'cover';
+            img.style.width = '100%';
+            img.style.height = '100%';
+        };
+    }
+});
+
 document.getElementById('downloadButton').addEventListener('click', function() {
                 html2canvas(document.querySelector('main'), { backgroundColor: null }).then(canvas => {
                     const link = document.createElement('a');
