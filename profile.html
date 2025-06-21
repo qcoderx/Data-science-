@@ -107,15 +107,16 @@
             input.addEventListener('change', function () {
     const file = input.files[0];
     if (file) {
-        img.src = URL.createObjectURL(file);
-        img.style.display = 'block';
-
-        img.onload = function () {
-            URL.revokeObjectURL(img.src); // Free memory
-            img.style.objectFit = 'cover';
-            img.style.width = '100%';
-            img.style.height = '100%';
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            img.src = e.target.result; // Base64 data URL
+            img.onload = function () {
+                img.style.objectFit = 'cover';
+                img.style.width = '100%';
+                img.style.height = '100%';
+            };
         };
+        reader.readAsDataURL(file);
     }
 });
 
