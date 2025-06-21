@@ -37,7 +37,7 @@
 </head>
 <body class="antialiased p-4 sm:p-6 md:p-8 flex items-center justify-center">
 
-    <main class="max-w-xl mx-auto w-full space-y-4 sm:space-y-6">
+    <main class="max-w-xl mx-auto w-full space-y-4 sm:space-y-6 bg-gradient-dark p-6 rounded-xl">
         <!-- space-y changed to be slightly less for more compact feel -->
 
         <!-- Header / Main Profile Card -->
@@ -111,7 +111,7 @@
                 }
             });
 document.getElementById('downloadButton').addEventListener('click', function() {
-                html2canvas(document.querySelector('main')).then(canvas => {
+                html2canvas(document.querySelector('main'), { backgroundColor: null }).then(canvas => {
                     const link = document.createElement('a');
                     link.href = canvas.toDataURL('image/png');
                     link.download = 'profile.png';
