@@ -79,6 +79,7 @@
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
             min-height: 60px; /* Ensure cells have height */
+            vertical-align: top;
         }
 
         th {
@@ -121,14 +122,17 @@
         .jumat {
             color: #00f7ff;
             font-style: italic;
+            vertical-align: middle;
         }
 
-        /* New Course Colors */
+        /* Course Colors */
         .MTH201 { color: #7f5af0; }
         .MTH203 { color: #ff6b6b; }
         .DTS201 { color: #ffd93d; }
         .DTS211 { color: #1dd3b0; }
         .MTH209 { color: #00b4d8; }
+        .STA223 { color: #f15bb5; } /* New */
+        .STA225 { color: #ff9f1c; } /* New */
         .NOT_FOUND { color: #aaaaaa; }
 
 
@@ -323,7 +327,7 @@
                 <td></td>
                 <td></td>
                 <td data-course-code="MTH203"><span class="MTH203">MTH203</span><span class="venue">LT 009</span></td>
-                <td></td>
+                <td data-course-code="STA223"><span class="STA223">STA 223</span><span class="venue">E 303</span></td>
                 <td></td>
             </tr>
             <tr>
@@ -344,7 +348,11 @@
             </tr>
             <tr>
                 <td class="time-slot">15:00–16:00</td>
-                <td data-course-code="MTH209"><span class="MTH209">MTH209</span><span class="venue">LT 009</span></td>
+                <td data-course-code="DTS201 MTH209" style="line-height: 1.6;">
+                    <span class="DTS201">DTS201</span><span class="venue">S015</span>
+                    <hr style="border-color: rgba(255,255,255,0.1); margin: 8px 0;">
+                    <span class="MTH209">MTH209</span><span class="venue">LT 009</span>
+                </td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -354,17 +362,17 @@
                 <td class="time-slot">16:00–17:00</td>
                 <td data-course-code="MTH209"><span class="MTH209">MTH209</span><span class="venue">LT 009</span></td>
                 <td></td>
+                <td data-course-code="STA225"><span class="STA225">STA 225</span><span class="venue">S015</span></td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td data-course-code="STA223"><span class="STA223">STA 223</span><span class="venue">S 024</span></td>
             </tr>
             <tr>
                 <td class="time-slot">17:00–18:00</td>
                 <td></td>
                 <td></td>
+                <td data-course-code="STA225"><span class="STA225">STA 225</span><span class="venue">S015</span></td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td data-course-code="STA223"><span class="STA223">STA 223</span><span class="venue">S 024</span></td>
             </tr>
         </tbody>
     </table>
@@ -377,6 +385,8 @@
             <li><strong class="MTH203">MTH203</strong> – Sets, Logic And Algebra I (2 Units)</li>
             <li><strong class="DTS201">DTS201</strong> – Introduction To Data Science (2 Units)</li>
             <li><strong class="MTH209">MTH209</strong> – Introduction To Numerical Analysis (2 Units)</li>
+            <li><strong class="STA223">STA 223</strong> – Categorical Data Analysis (Found as LAG-STA 223)</li>
+            <li><strong class="STA225">STA 225</strong> – Statistical Quality Control (Found as LAG-STA 225)</li>
             <li style="background-color: #331a1a;"><strong class="NOT_FOUND">COS201</strong> – Computer Programming I (3 Units) - Not Found</li>
             <li style="background-color: #331a1a;"><strong class="NOT_FOUND">CSC203</strong> – Discrete Structures (2 Units) - Not Found</li>
             <li style="background-color: #331a1a;"><strong class="NOT_FOUND">ENT241</strong> – Entrepreneurship And Innovation (2 Units) - Not Found</li>
@@ -435,10 +445,10 @@
             "DTS201": {
                 name: "Introduction To Data Science",
                 venues: {
+                    "Monday 10:00-11:00": "S 024",
+                    "Monday 11:00-12:00": "S 024",
                     "Monday 14:00-15:00": "S015",
-                    "Monday 15:00-16:00": "S015",
-                    "Thursday 10:00-11:00": "S 024",
-                    "Thursday 11:00-12:00": "S 024"
+                    "Monday 15:00-16:00": "S015"
                 }
             },
             "MTH209": {
@@ -447,6 +457,21 @@
                     "Monday 15:00-16:00": "LT 009",
                     "Monday 16:00-17:00": "LT 009",
                     "Wednesday 11:00-12:00": "LT 009"
+                }
+            },
+            "STA223": {
+                name: "Categorical Data Analysis",
+                venues: {
+                    "Thursday 12:00-13:00": "E 303",
+                    "Friday 16:00-17:00": "S 024",
+                    "Friday 17:00-18:00": "S 024"
+                }
+            },
+            "STA225": {
+                name: "Statistical Quality Control",
+                venues: {
+                    "Wednesday 16:00-17:00": "S015",
+                    "Wednesday 17:00-18:00": "S015"
                 }
             }
         };
@@ -474,47 +499,49 @@
                 const timeWithHyphen = timeWithEnDash.replace('–', '-');
                 const fullDayTimeKey = `${dayOfWeek} ${timeWithHyphen}`;
                 
-                const courseDetails = courseData[mainCourseCode];
-                let venue = "Not specified";
-                let courseName = "Unknown Course";
+                const allCodes = [];
+                const allNames = [];
+                const allVenues = [];
 
-                if (courseDetails) {
-                    courseName = courseDetails.name;
-                    if (courseDetails.venues && courseDetails.venues[fullDayTimeKey]) {
-                        venue = courseDetails.venues[fullDayTimeKey];
-                    } else {
-                         // Fallback for 2-hour slots
-                        const [startTime, endTime] = timeWithHyphen.split('-');
-                        const prevHour = (parseInt(startTime.split(':')[0]) - 1).toString().padStart(2, '0') + ":" + startTime.split(':')[1];
-                        const prevHourKey = `${dayOfWeek} ${prevHour}-${startTime}`;
-                        if(courseDetails.venues && courseDetails.venues[prevHourKey]) {
-                            venue = courseDetails.venues[prevHourKey];
+                courseCodes.forEach(code => {
+                    const courseDetails = courseData[code];
+                    let venue = "Not specified";
+                    let courseName = "Unknown Course";
+
+                    if (courseDetails) {
+                        courseName = courseDetails.name;
+                        if (courseDetails.venues && courseDetails.venues[fullDayTimeKey]) {
+                            venue = courseDetails.venues[fullDayTimeKey];
                         } else {
-                            console.warn(`Venue not found for ${mainCourseCode} at "${fullDayTimeKey}".`);
+                            // Fallback for 2-hour slots
+                            const [startTime, endTime] = timeWithHyphen.split('-');
+                            const prevHour = (parseInt(startTime.split(':')[0]) - 1).toString().padStart(2, '0') + ":" + startTime.split(':')[1];
+                            const prevHourKey = `${dayOfWeek} ${prevHour}-${startTime}`;
+                            if(courseDetails.venues && courseDetails.venues[prevHourKey]) {
+                                venue = courseDetails.venues[prevHourKey];
+                            } else {
+                                console.warn(`Venue not found for ${code} at "${fullDayTimeKey}".`);
+                            }
                         }
                     }
-                }
+                    allCodes.push(code);
+                    allNames.push(courseName);
+                    allVenues.push(venue);
+                });
 
-                // Handle shared slots
-                if(courseCodes.length > 1) {
-                    const allNames = courseCodes.map(code => courseData[code] ? courseData[code].name : code).join(' / ');
-                    document.getElementById("modalCourseCode").textContent = courseCodes.join(' / ');
-                    document.getElementById("modalCourseName").textContent = allNames;
-                } else {
-                    document.getElementById("modalCourseCode").textContent = mainCourseCode;
-                    document.getElementById("modalCourseName").textContent = courseName;
-                }
 
+                document.getElementById("modalCourseCode").textContent = allCodes.join(' / ');
+                document.getElementById("modalCourseName").textContent = allNames.join(' / ');
                 document.getElementById("modalDay").textContent = dayOfWeek;
                 document.getElementById("modalTime").textContent = timeWithEnDash;
-                document.getElementById("modalVenue").textContent = venue;
+                document.getElementById("modalVenue").textContent = allVenues.join(' / ');
 
                 document.getElementById("setReminder").dataset.course = JSON.stringify({
-                    code: courseCodes.join(' / '),
-                    name: courseName,
+                    code: allCodes.join(' / '),
+                    name: allNames.join(' / '),
                     day: dayOfWeek,
                     time: timeWithEnDash,
-                    venue: venue,
+                    venue: allVenues.join(' / '),
                     fullDayTime: fullDayTimeKey
                 });
                 modal.style.display = "block";
