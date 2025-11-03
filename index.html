@@ -78,6 +78,7 @@
             padding: 18px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 60px; /* Ensure cells have height */
         }
 
         th {
@@ -94,6 +95,18 @@
             transition: all 0.3s ease;
         }
 
+        td span {
+            display: block;
+            font-weight: bold;
+        }
+
+        td span.venue {
+            font-size: 0.9rem;
+            font-weight: normal;
+            color: #ccc;
+            margin-top: 4px;
+        }
+
         td:hover {
             background-color: #1a2a3a;
             cursor: pointer;
@@ -104,15 +117,20 @@
             color: #0ff;
             font-weight: 700;
         }
+        
+        .jumat {
+            color: #00f7ff;
+            font-style: italic;
+        }
 
-        .BIO102 { color: #00c9a7; }
-        .CHM-CM102 { color: #ff6b6b; }
-        .COS102 { color: #ffd93d; }
-        .LAG-COS106 { color: #1dd3b0; }
-        .MTH102 { color: #7f5af0; }
-        .PHY-CM102 { color: #00b4d8; }
-        .STA112 { color: #f15bb5; }
-        .LAG-COS104 { color: #ff9f1c; }
+        /* New Course Colors */
+        .MTH201 { color: #7f5af0; }
+        .MTH203 { color: #ff6b6b; }
+        .DTS201 { color: #ffd93d; }
+        .DTS211 { color: #1dd3b0; }
+        .MTH209 { color: #00b4d8; }
+        .NOT_FOUND { color: #aaaaaa; }
+
 
         .course-key {
             max-width: 850px;
@@ -136,7 +154,7 @@
             list-style: none;
             padding: 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 12px;
             font-size: 1rem;
         }
@@ -150,7 +168,7 @@
 
         .course-key li strong {
             display: inline-block;
-            width: 110px;
+            width: 100px;
         }
 
         /* Modal styles */
@@ -254,7 +272,7 @@
         </ul>
     </nav>
 
-    <h1>DATA SCIENCE TIME TABLE</h1>
+    <h1>DATA SCIENCE 200 LEVEL TIME TABLE</h1>
 
     <table>
         <thead>
@@ -270,42 +288,42 @@
         <tbody>
             <tr>
                 <td class="time-slot">08:00–09:00</td>
+                <td data-course-code="DTS211"><span class="DTS211">DTS211</span><span class="venue">S015</span></td>
                 <td></td>
                 <td></td>
+                <td data-course-code="MTH201"><span class="MTH201">MTH201</span><span class="venue">LT 018</span></td>
                 <td></td>
-                <td></td>
-                <td><span class="CHM-CM102">CHM-CM102</span></td>
             </tr>
             <tr>
                 <td class="time-slot">09:00–10:00</td>
-                <td><span class="CHM-CM102">CHM-CM102</span></td>
-                <td><span class="BIO102">BIO102</span></td>
+                <td data-course-code="DTS211"><span class="DTS211">DTS211</span><span class="venue">S015</span></td>
                 <td></td>
                 <td></td>
                 <td></td>
+                <td data-course-code="MTH203"><span class="MTH203">MTH203</span><span class="venue">LT 009</span></td>
             </tr>
             <tr>
                 <td class="time-slot">10:00–11:00</td>
-                <td><span class="COS102">COS102</span></td>
-                <td><span class="BIO102">BIO102</span></td>
-                <td><span class="CHM-CM102">CHM-CM102</span></td>
                 <td></td>
-                <td><span class="PHY-CM102">PHY-CM102</span></td>
+                <td data-course-code="MTH201 MTH203"><span class="MTH201">MTH201</span> / <span class="MTH203">MTH203</span><span class="venue">LT 026</span></td>
+                <td></td>
+                <td data-course-code="DTS201"><span class="DTS201">DTS201</span><span class="venue">S 024</span></td>
+                <td data-course-code="MTH203"><span class="MTH203">MTH203</span><span class="venue">LT 009</span></td>
             </tr>
             <tr>
                 <td class="time-slot">11:00–12:00</td>
-                <td><span class="COS102">COS102</span></td>
                 <td></td>
-                <td><span class="MTH102">MTH102</span></td>
-                <td><span class="LAG-COS106">LAG-COS106</span></td>
+                <td></td>
+                <td data-course-code="MTH209"><span class="MTH209">MTH209</span><span class="venue">LT 009</span></td>
+                <td data-course-code="DTS201"><span class="DTS201">DTS201</span><span class="venue">S 024</span></td>
                 <td></td>
             </tr>
             <tr>
                 <td class="time-slot">12:00–13:00</td>
                 <td></td>
-                <td><span class="MTH102">MTH102</span></td>
-                <td><span class="MTH102">MTH102</span></td>
-                <td><span class="LAG-COS106">LAG-COS106</span></td>
+                <td></td>
+                <td data-course-code="MTH203"><span class="MTH203">MTH203</span><span class="venue">LT 009</span></td>
+                <td></td>
                 <td></td>
             </tr>
             <tr>
@@ -314,27 +332,27 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td class="jumat">JUMAT SERVICE</td>
             </tr>
             <tr>
                 <td class="time-slot">14:00–15:00</td>
-                <td><span class="PHY-CM102">PHY-CM102</span></td>
+                <td data-course-code="DTS201"><span class="DTS201">DTS201</span><span class="venue">S015</span></td>
                 <td></td>
-                <td><span class="LAG-COS104">LAG-COS104</span></td>
-                <td><span class="PHY-CM102">PHY-CM102</span></td>
                 <td></td>
+                <td></td>
+                <td class="jumat">JUMAT SERVICE</td>
             </tr>
             <tr>
                 <td class="time-slot">15:00–16:00</td>
+                <td data-course-code="MTH209"><span class="MTH209">MTH209</span><span class="venue">LT 009</span></td>
                 <td></td>
                 <td></td>
-                <td><span class="LAG-COS104">LAG-COS104</span></td>
-                <td><span class="PHY-CM102">PHY-CM102</span></td>
+                <td></td>
                 <td></td>
             </tr>
             <tr>
                 <td class="time-slot">16:00–17:00</td>
-                <td><span class="STA112">STA112</span></td>
+                <td data-course-code="MTH209"><span class="MTH209">MTH209</span><span class="venue">LT 009</span></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -342,7 +360,7 @@
             </tr>
             <tr>
                 <td class="time-slot">17:00–18:00</td>
-                <td><span class="STA112">STA112</span></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -354,14 +372,15 @@
     <div class="course-key">
         <h2>Course Code Key</h2>
         <ul>
-            <li><strong class="BIO102">BIO102</strong> – General Biology II</li>
-            <li><strong class="CHM-CM102">CHM-CM102</strong> – General Chemistry II</li>
-            <li><strong class="COS102">COS102</strong> – Computer as a Problem-Solving Tool</li>
-            <li><strong class="LAG-COS106">LAG-COS106</strong> – Introduction to Algorithms & Data Structures</li>
-            <li><strong class="MTH102">MTH102</strong> – Elementary Mathematics II: Calculus</li>
-            <li><strong class="PHY-CM102">PHY-CM102</strong> – General Physics II</li>
-            <li><strong class="STA112">STA112</strong> – Probability I</li>
-            <li><strong class="LAG-COS104">LAG-COS104</strong> – Introduction to Web Design & Development</li>
+            <li><strong class="DTS211">DTS211</strong> – Introduction To R Programming (2 Units)</li>
+            <li><strong class="MTH201">MTH201</strong> – Mathematical Methods I (2 Units)</li>
+            <li><strong class="MTH203">MTH203</strong> – Sets, Logic And Algebra I (2 Units)</li>
+            <li><strong class="DTS201">DTS201</strong> – Introduction To Data Science (2 Units)</li>
+            <li><strong class="MTH209">MTH209</strong> – Introduction To Numerical Analysis (2 Units)</li>
+            <li style="background-color: #331a1a;"><strong class="NOT_FOUND">COS201</strong> – Computer Programming I (3 Units) - Not Found</li>
+            <li style="background-color: #331a1a;"><strong class="NOT_FOUND">CSC203</strong> – Discrete Structures (2 Units) - Not Found</li>
+            <li style="background-color: #331a1a;"><strong class="NOT_FOUND">ENT241</strong> – Entrepreneurship And Innovation (2 Units) - Not Found</li>
+            <li style="background-color: #331a1a;"><strong class="NOT_FOUND">LAG-CSC103</strong> – Fundamental Of Programming (3 Units) - Not Found</li>
         </ul>
     </div>
 
@@ -390,64 +409,44 @@
     <script>
         // Course data with venues
         const courseData = {
-            "BIO102": {
-                name: "General Biology II",
+            "DTS211": {
+                name: "Introduction To R Programming",
                 venues: {
-                    "Tuesday 09:00-10:00": "DLI B/C",
-                    "Tuesday 10:00-11:00": "DLI B/C"
+                    "Monday 08:00-09:00": "S015",
+                    "Monday 09:00-10:00": "S015"
                 }
             },
-            "CHM-CM102": {
-                name: "General Chemistry II",
+            "MTH201": {
+                name: "Mathematical Methods I",
                 venues: {
-                    "Monday 09:00-10:00": "DLI A/B/C",
-                    "Wednesday 10:00-11:00": "DLI A/B/C",
-                    "Friday 08:00-09:00": "DLI A/B/C"
+                    "Tuesday 10:00-11:00": "LT 026",
+                    "Thursday 08:00-09:00": "LT 018"
                 }
             },
-            "COS102": {
-                name: "Computer as a Problem-Solving Tool",
+            "MTH203": {
+                name: "Sets, Logic And Algebra I",
                 venues: {
-                    "Monday 10:00-11:00": "LT 009",
-                    "Monday 11:00-12:00": "LT 009"
+                    "Tuesday 10:00-11:00": "LT 026",
+                    "Wednesday 12:00-13:00": "LT 009",
+                    "Friday 09:00-10:00": "LT 009",
+                    "Friday 10:00-11:00": "LT 009"
                 }
             },
-            "LAG-COS106": {
-                name: "Introduction to Algorithms & Data Structures",
+            "DTS201": {
+                name: "Introduction To Data Science",
                 venues: {
-                    "Thursday 11:00-12:00": "S006",
-                    "Thursday 12:00-13:00": "S006"
+                    "Monday 14:00-15:00": "S015",
+                    "Monday 15:00-16:00": "S015",
+                    "Thursday 10:00-11:00": "S 024",
+                    "Thursday 11:00-12:00": "S 024"
                 }
             },
-            "MTH102": {
-                name: "Elementary Mathematics II: Calculus",
+            "MTH209": {
+                name: "Introduction To Numerical Analysis",
                 venues: {
-                    "Tuesday 12:00-13:00": "DLI A/B/C",
-                    "Wednesday 11:00-12:00": "DLI A/B/C",
-                    "Wednesday 12:00-13:00": "DLI A/B/C"
-                }
-            },
-            "PHY-CM102": {
-                name: "General Physics II",
-                venues: {
-                    "Monday 14:00-15:00": "DLI A/B/C",
-                    "Thursday 14:00-15:00": "DLI A/B/C",
-                    "Thursday 15:00-16:00": "DLI A/B/C",
-                    "Friday 10:00-11:00": "DLI A/B/C"
-                }
-            },
-            "STA112": {
-                name: "Probability I",
-                venues: {
-                    "Monday 16:00-17:00": "DLI A/B/C",
-                    "Monday 17:00-18:00": "DLI A/B/C"
-                }
-            },
-            "LAG-COS104": {
-                name: "Introduction to Web Design & Development",
-                venues: {
-                    "Wednesday 14:00-15:00": "E303",
-                    "Wednesday 15:00-16:00": "E303"
+                    "Monday 15:00-16:00": "LT 009",
+                    "Monday 16:00-17:00": "LT 009",
+                    "Wednesday 11:00-12:00": "LT 009"
                 }
             }
         };
@@ -457,37 +456,61 @@
         const span = document.getElementsByClassName("close")[0];
         const notification = document.getElementById("notification");
 
-        // When user clicks on a course
-        document.querySelectorAll('td span').forEach(course => {
-            course.addEventListener('click', function() {
-                const courseCode = this.className;
-                const courseCell = this.parentElement;
-                const courseRow = courseCell.parentElement;
+        // When user clicks on a course cell
+        document.querySelectorAll('td[data-course-code]').forEach(courseCell => {
+            courseCell.addEventListener('click', function() {
+                const courseCodes = this.dataset.courseCode.split(' ');
+                const mainCourseCode = courseCodes[0]; // Just use the first course for the modal
+                
+                if (!mainCourseCode || mainCourseCode === "NOT_FOUND") return; // Don't open modal for "Not Found"
+
+                const courseRow = this.parentElement;
                 const table = this.closest('table');
-                const dayColumnIndex = courseCell.cellIndex;
+                const dayColumnIndex = this.cellIndex;
                 const headerCells = table.querySelector('thead tr').children;
                 const dayOfWeek = headerCells[dayColumnIndex].textContent.trim();
+                
                 const timeWithEnDash = courseRow.children[0].textContent.trim();
                 const timeWithHyphen = timeWithEnDash.replace('–', '-');
                 const fullDayTimeKey = `${dayOfWeek} ${timeWithHyphen}`;
-                const courseDetails = courseData[courseCode];
+                
+                const courseDetails = courseData[mainCourseCode];
                 let venue = "Not specified";
-                const courseName = courseDetails ? courseDetails.name : "Unknown Course";
+                let courseName = "Unknown Course";
 
-                if (courseDetails && courseDetails.venues && courseDetails.venues[fullDayTimeKey]) {
-                    venue = courseDetails.venues[fullDayTimeKey];
-                } else {
-                    console.warn(`Venue not found for ${courseCode} at "${fullDayTimeKey}". Please check courseData. Available keys for ${courseCode}:`, courseDetails && courseDetails.venues ? Object.keys(courseDetails.venues) : 'Course code or venues not found in courseData.');
+                if (courseDetails) {
+                    courseName = courseDetails.name;
+                    if (courseDetails.venues && courseDetails.venues[fullDayTimeKey]) {
+                        venue = courseDetails.venues[fullDayTimeKey];
+                    } else {
+                         // Fallback for 2-hour slots
+                        const [startTime, endTime] = timeWithHyphen.split('-');
+                        const prevHour = (parseInt(startTime.split(':')[0]) - 1).toString().padStart(2, '0') + ":" + startTime.split(':')[1];
+                        const prevHourKey = `${dayOfWeek} ${prevHour}-${startTime}`;
+                        if(courseDetails.venues && courseDetails.venues[prevHourKey]) {
+                            venue = courseDetails.venues[prevHourKey];
+                        } else {
+                            console.warn(`Venue not found for ${mainCourseCode} at "${fullDayTimeKey}".`);
+                        }
+                    }
                 }
 
-                document.getElementById("modalCourseCode").textContent = courseCode;
-                document.getElementById("modalCourseName").textContent = courseName;
+                // Handle shared slots
+                if(courseCodes.length > 1) {
+                    const allNames = courseCodes.map(code => courseData[code] ? courseData[code].name : code).join(' / ');
+                    document.getElementById("modalCourseCode").textContent = courseCodes.join(' / ');
+                    document.getElementById("modalCourseName").textContent = allNames;
+                } else {
+                    document.getElementById("modalCourseCode").textContent = mainCourseCode;
+                    document.getElementById("modalCourseName").textContent = courseName;
+                }
+
                 document.getElementById("modalDay").textContent = dayOfWeek;
                 document.getElementById("modalTime").textContent = timeWithEnDash;
                 document.getElementById("modalVenue").textContent = venue;
 
                 document.getElementById("setReminder").dataset.course = JSON.stringify({
-                    code: courseCode,
+                    code: courseCodes.join(' / '),
                     name: courseName,
                     day: dayOfWeek,
                     time: timeWithEnDash,
@@ -623,14 +646,7 @@
             console.log(`Time until first notification (ms): ${timeUntilFirst}`);
 
             if (timeUntilFirst < 0) {
-                // This case should ideally be prevented by the logic above
                 console.error("Calculated timeUntilFirst is negative. This indicates an issue in date calculation.", { courseInfo, nowDate: now.toString(), nextDateCalc: nextDate.toString() });
-                // Fallback: schedule for 1 minute from now to avoid immediate firing with negative, and still allow testing.
-                // Or, more correctly, add another week if this somehow happens.
-                // nextDate.setDate(nextDate.getDate() + 7);
-                // timeUntilFirst = nextDate.getTime() - now.getTime();
-                // console.warn("Corrected timeUntilFirst after being negative:", timeUntilFirst, nextDate.toString());
-                // For now, just log, as the logic should prevent this.
             }
 
             // Schedule the first notification
